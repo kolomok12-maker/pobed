@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Легенда Mobile Legends | Награждение</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #C66EFD;
+            --accent: #46A8FD;
+            --gold: #FFD700;
+            --dark: #1a0033;
+            --light: #FFF5F7;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Частицы */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            to {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Герой секция */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .trophy-icon {
+            font-size: 120px;
+            animation: bounce 2s infinite;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF69B4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Карточка награждения */
+        .award-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 60px 40px;
+            margin: 60px auto;
+            max-width: 800px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 1s ease 0.5s both;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .award-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .award-title {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .award-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .location-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B9D, #C66EFD);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(198, 110, 253, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Статистика */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Кнопка подарка */
+        .gift-section {
+            text-align: center;
+            margin: 100px 0;
+            padding: 40px;
+        }
+
+        .gift-button {
+            position: relative;
+            display: inline-block;
+            padding: 25px 60px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #FF6B9D, #C66EFD, #46A8FD);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: gradientShift 3s ease infinite;
+            box-shadow: 0 15px 35px rgba(198, 110, 253, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .gift-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 40px rgba(198, 110, 253, 0.6);
+        }
+
+        .gift-button::before {
+            content: '💝';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Галерея */
+        .gallery {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            animation: fadeIn 1s ease;
+        }
+
+        .gallery.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transform: scale(0);
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .photo-card:nth-child(1) { animation-delay: 0.2s; }
+        .photo-card:nth-child(2) { animation-delay: 0.4s; }
+        .photo-card:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes popIn {
+            to {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+        }
+
+        /* Сердечки */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        .hearts.active {
+            display: block;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: flyUp 4s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes flyUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Поздравительный текст */
+        .congratulations {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .congratulations.active {
+            display: block;
+            animation: fadeInUp 1s ease;
+        }
+
+        .congrats-title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #FF1493, #FFB6C1, #FFC0CB);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .congrats-message {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .award-card {
+                padding: 40px 20px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <!-- Герой секция -->
+        <section class="hero">
+            <div class="trophy-icon">🏆</div>
+            <h1>ЛЕГЕНДАРНАЯ ПОБЕДИТЕЛЬНИЦА</h1>
+            <p class="subtitle">Официальное признание величайшего игрока Mobile Legends</p>
+        </section>
+
+        <!-- Карточка награждения -->
+        <section class="award-card">
+            <h2 class="award-title">Сертификат Чемпиона</h2>
+            <p class="award-text">
+                Настоящим удостоверяется, что обладательница этой награды признана 
+                <strong>ЛУЧШИМ ИГРОКОМ ПЛАНЕТЫ</strong> в Mobile Legends Bang Bang. 
+                Её невероятное мастерство, стратегическое мышление и преданность игре 
+                покорили сердца миллионов фанатов по всему миру.
+            </p>
+            <p class="award-text">
+                От солнечного Сочи до самых дальних уголков киберспортивного мира - 
+                твоё имя стало легендой! 🌟
+            </p>
+            <span class="location-badge">📍 Сочи, Россия</span>
+        </section>
+
+        <!-- Статистика -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Побед подряд</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">#1</div>
+                <div class="stat-label">В мировом рейтинге</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Винрейт</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">♥️</div>
+                <div class="stat-label">В сердцах фанатов</div>
+            </div>
+        </section>
+
+        <!-- Поздравления -->
+        <section class="award-card">
+            <h2 class="award-title" style="color: #FFB6C1;">С любовью и восхищением</h2>
+            <p class="award-text">
+                Дорогая чемпионка! Твой талант освещает игровой мир ярче любой звезды. 
+                Каждая твоя игра - это произведение искусства, каждое движение - поэзия в действии.
+            </p>
+            <p class="award-text">
+                Ты не просто играешь - ты творишь магию, вдохновляешь тысячи игроков 
+                и доказываешь, что настоящее мастерство не знает границ. Твоя страсть к игре 
+                и невероятный талант делают тебя поистине уникальной! 💖
+            </p>
+        </section>
+
+        <!-- Секция подарка -->
+        <section class="gift-section">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 30px;">
+                У нас есть особенный подарок для тебя! 🎁
+            </h2>
+            <button class="gift-button" onclick="revealGift()">
+                Открыть подарок
+            </button>
+        </section>
+
+        <!-- Поздравительное сообщение -->
+        <section class="congratulations" id="congratulations">
+            <h2 class="congrats-title">Ты - настоящая легенда! 💕</h2>
+            <p class="congrats-message">
+                Эти моменты запечатлели твою невероятную игру и то волшебство, 
+                которое ты приносишь в мир Mobile Legends. Продолжай сиять, 
+                вдохновлять и покорять новые вершины!
+            </p>
+        </section>
+
+        <!-- Галерея фотографий -->
+        <section class="gallery" id="gallery">
+            <div class="photo-card">
+                <div class="photo-container">
+                    <img src="ChatGPT Image 14 авг. 2025 г., 19_48_56.png" alt="Фото 1 - Игровой момент" loading="lazy">
+                </div>
+            </div>
+            <div class="photo-card">
+                <div class="photo-container">
+                    <img src="ChatGPT Image 14 авг. 2025 г., 19_49_47.png" alt="Фото 2 - Победа" loading="lazy">
+                </div>
+            </div>
+            <div class="photo-card">
+                <div class="photo-container">
+                    <img src="ChatGPT Image 14 авг. 2025 г., 19_55_26.png" alt="Фото 3 - Чемпион" loading="lazy">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Создание частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Создание сердечек
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '💓', '💞'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    heartsContainer.appendChild(heart);
+                }, i * 100);
+            }
+        }
+
+        // Функция раскрытия подарка
+        function revealGift() {
+            const button = event.target;
+            button.style.display = 'none';
+            
+            // Показать поздравления
+            document.getElementById('congratulations').classList.add('active');
+            
+            // Показать галерею и прокрутить к ней
+            setTimeout(() => {
+                const gallery = document.getElementById('gallery');
+                gallery.classList.add('active');
+                
+                // Автоматическая прокрутка к галерее
+                setTimeout(() => {
+                    gallery.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 100);
+            }, 500);
+            
+            // Запустить сердечки
+            document.getElementById('hearts').classList.add('active');
+            createHearts();
+            
+            // Конфетти эффект
+            confetti();
+        }
+
+        // Простой конфетти эффект
+        function confetti() {
+            const colors = ['#FF6B9D', '#C66EFD', '#46A8FD', '#FFD700', '#FF69B4'];
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.pointerEvents = 'none';
+            container.style.zIndex = '1000';
+            document.body.appendChild(container);
+            
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.style.position = 'absolute';
+                confettiPiece.style.width = '10px';
+                confettiPiece.style.height = '10px';
+                confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiPiece.style.left = Math.random() * 100 + '%';
+                confettiPiece.style.top = '-10px';
+                confettiPiece.style.opacity = '1';
+                confettiPiece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confettiPiece.style.transition = 'all 3s ease-out';
+                container.appendChild(confettiPiece);
+                
+                setTimeout(() => {
+                    confettiPiece.style.top = '110%';
+                    confettiPiece.style.opacity = '0';
+                    confettiPiece.style.transform = `rotate(${Math.random() * 720}deg)`;
+                }, 10);
+            }
+            
+            setTimeout(() => container.remove(), 3500);
+        }
+
+        // Инициализация
+        createParticles();
+
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Анимация чисел в статистике
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 1s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
